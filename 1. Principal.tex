@@ -1,0 +1,85 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+
+
+\usepackage{imakeidx} %indice
+
+\usepackage{amsmath,amssymb}
+\usepackage[export]{adjustbox}
+\usepackage{url, lipsum}
+\usepackage{tgbonum}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\spanishdecimal{.} %Evita que posteriormente latex cambien el punto por coma
+%\usepackage{subfigure}
+
+\usepackage{tikz,tkz-tab}%Permite hacer cajas o algo así
+\usetikzlibrary{matrix,arrows, positioning,shadows,shadings,backgrounds,calc, shapes, tikzmark}
+\usepackage{tcolorbox, empheq}% Permite darle color a las cajas
+\tcbuselibrary{skins,breakable,listings,theorems}
+
+\DeclareUnicodeCharacter{2212}{-}
+\usepackage{float}
+\usepackage{multicol}
+
+%\usepackage{pgfplots}
+
+
+
+\makeindex %indice
+
+\begin{document}\label{principal}
+
+\title{Material de métodos numéricos}
+\author{Fernando Vazquez Valdez}
+%\date{ Hoy merengues }
+
+
+
+\maketitle
+
+
+\begin{abstract} %Resumen
+\centering
+Temario de métodos numéricos.
+\end{abstract}
+\newpage
+
+\begin{center}
+\section*{1. Introducción a los métodos numéricos}
+\end{center}
+
+\input{2. Errores de redondeo y aritmética computacional}
+\input{3. Algoritmos y convergencia}
+\newpage
+
+\begin{center}
+\section*{2. Solución a ecuaciones en una variable}
+\end{center}
+
+\input{4. Método de bisección}
+\newpage
+
+\input{5. Método punto fijo o sustitución sucesiva}
+\newpage
+
+\input{6. Método de Newton y sus variantes}
+\newpage
+
+\input{7. Falsa posición}
+\newpage
+
+\input{8. Newton varias variables}
+\newpage
+
+\input{9. Ecuaciones diferenciales ordinarias}
+\newpage
+
+\input{10. Sistemas de ecuaciones diferenciales ordinarias}
+\newpage
+
+\input{15. Apendice I}
+
+\end{document}

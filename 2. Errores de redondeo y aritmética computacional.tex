@@ -1,0 +1,119 @@
+\section*{Errores de redondeo y aritmética computacional} % El * lo pongo para eliminar el número de la sección, la desventaja es que, si hacemos un índice, no aparecerá en él.
+
+La aritmética realizada por una computadora o calculadora es diferente de la aritmética de los curso de álgebra o cálculo; en nuestro contexto matemático tradicional disponemos de números con una infinidad de dígitos, por ejemplo, definimos $\sqrt{3}$ como el único número positivo que cuando es multiplicado por sí mismo produce el entero $3$; sin embargo, en el mundo computacional cada número representable tiene un número fijo y finito de dígitos. Esto significa, por ejemplo, que solo los números racionales -y ni siquiera todos- pueden ser representados exactamente.
+
+El error producido cuando una calculadora o computadora es usada para realizar cálculos con números reales es llamado \textbf{error de redondeo}. Esto se debe a que la aritmética realizada por la maquina involucra números con un determinado número de dígitos y, con el resultado obtenido, solo se tiene una representación aproximada del número exacto.
+
+\subsection*{1.2 Números de maquina binarios}
+Para los números reales es usada la representación de 64-bit (dígitos binarios). El primer bit es un indicador de signo, denominado s. Es seguido por un exponente de 11-bit, c, llamado \textbf{característica}, y una fracción binaria de 52-bit, f, llamada \textbf{mantisa}. La base para el exponente es 2.
+
+Dado que 52 dígitos binarios corresponden a entre 16 y 17 dígitos decimales podemos asumir que un número representado en este sistema tiene cuando menos 16 dígitos decimales de precisión. El exponente de 11 dígitos binarios da un rango de 0 a $2^{11}-1=2047$. Sin embargo, usar solo enteros positivos para el exponente no permite una representación adecuada de números con magnitud pequeña. Para garantizar que los números con magnitud pequeña sean igualmente representables, se resta 1023 de la característica, por lo que el rango del exponente es en realidad de -1023 a 1024.
+
+Para ahorrar almacenamiento y proporcionar una única representación de cada número de maquina se impone una normalización. Usando este sistema se obtiene un número flotante de la forma 
+\begin{equation*} 
+(-1)^{s}2^{c-1023}(1+f) 
+\end{equation*}
+
+\subsubsection*{Ejemplo}
+Considere el número binario
+\begin{equation*} % Nuevamente el * es para que no numere la ecuación.
+    0 \ 10000000011 \ 1011100100010000000000000000000000000000000000000000
+\end{equation*}
+
+El bit más a la izquierda es $s=0$ lo cual indica que el número es positivo. Los siguientes 11 bits $10000000011$ dan la característica y son equivalentes al número decimal 
+\begin{equation*} 
+c=1\cdot2^{10}+0\cdot2^{9}+\cdot\cdot\cdot+0\cdot2^{2}+1\cdot2^{1}+1\cdot2^{0}=1024+2+1=1027.
+\end{equation*}
+La parte exponencial del número es, por lo tanto, $2^{1027-1023}=2^{4}$. Los 52 bits finales especifican la mantisa
+\begin{equation*} 
+f=1\cdot(\frac{1}{2})^{1}+1\cdot(\frac{1}{2})^{3}+1\cdot(\frac{1}{2})^{4}+1\cdot(\frac{1}{2})^{5}+1\cdot(\frac{1}{2})^{8}+1\cdot(\frac{1}{2})^{12}.
+\end{equation*}
+En consecuencia este número representa representa precisamente al número decimal
+\begin{equation*} 
+\begin{split}
+(-1)^{s}2^{c-1023}(1+f) &= (-1)^{0}\cdot2^{1027-1023}(1+(\frac{1}{2}+\frac{1}{8}+\frac{1}{16}+\frac{1}{32}+\frac{1}{256}+\frac{1}{4096}))\\
+&= 27.56640625.
+\end{split}
+\end{equation*}
+
+\begin{comment}
+\subsubsection*{Nota}
+Los números ocupados en cálculos que tienen una magnitud menor a \\
+\begin{equation*} 
+2^{-1022}\cdot(1+0)
+\end{equation*}\\
+Resultan en ser despreciables y generalmente se toman como cero. Números más grandes que
+\begin{equation*} 
+2^{1023}\cdot(2-2^{-52})
+\end{equation*}
+Resultan en una saturación y típicamente causan que los cálculos se detengan.
+\end{comment}
+
+\begin{tcolorbox}[colback=gray!5!]
+\subsubsection*{Nota}
+Los números ocupados en cálculos que tienen una magnitud menor a \\
+\begin{equation*} 
+2^{-1022}\cdot(1+0) \approx 0.22251\times 10^{-307}
+\end{equation*}\\
+Resultan en sub-desbordamiento que generalmente se toman como cero. Números más grandes que
+\begin{equation*} 
+2^{1023}\cdot(2-2^{-52}) \approx 0.17977\times 10^{309}
+\end{equation*}
+Resultan en una saturación y típicamente causan que los cálculos se detengan.
+\end{tcolorbox}
+
+\subsection*{1.3 Números decimales de punto flotante}
+La forma de punto flotante de un número decimal \textit{y} es detonada por \textit{fl(y)} y se obtiene al delimitar la mantisa de \textit{y} a \textit{k} cifras decimales. Hay dos formas comunes de realizar dicha delimitación, la primera es llamada \textbf{truncamiento} y es simplemente cortar los dígitos de la mantisa, lo cual nos produce la siguiente forma de punto flotante
+\begin{equation*}
+    fl(y)=0.d_1d_2\cdot\cdot\cdot d_k\times10^{n}
+\end{equation*}
+La otra forma es llamada \textbf{redondeo} y agrega $5\times10^{n-(k+1)}$ a \textit{y} para luego cortar el resultado obteniendo un número de la forma
+\begin{equation*}
+    fl(y)=0.\delta_1\delta_2\cdot\cdot\cdot \delta_k\times10^{n}
+\end{equation*}
+Para redondeos, cuando $d_{k+1}>5$, agregamos 1 a $d_k$ para obtener fl(y); quiere decir que redondeamos hacia arriba.
+
+\subsubsection*{Ejemplo}
+Determine los cinco dígitos de número irracional $\pi$ \textbf{(a)} truncando y \textbf{(b)} redondeando.
+
+\textbf{Solución}. El número $\pi$ tiene una expansión infinita de decimales $\pi=3.14159265...$.
+Escrito en la forma decimal normalizada tenemos
+\begin{equation*}
+    \pi=3.14159265...\times10^{1}
+\end{equation*}
+\quad\quad\quad \textbf{(a)} La forma de $\pi$ en punto flotante usando truncamiento a cinco dígitos es 
+\begin{equation*}
+    fl(\pi)=0.31415\times10^{1}=3.1415.
+\end{equation*}
+\quad\quad\quad \textbf{(b)} El sexto dígito de la expansión decimal de  $\pi$ es un 9, entonces su forma de punto flotante utilizando redondeo a cinco dígitos es
+\begin{equation*}
+    fl(\pi)=(0.31415+0.00001)\times10^{1}=3.1416.
+\end{equation*}
+
+\begin{tcolorbox}[colback=gray!5!]
+\subsubsection*{Definición}
+Suponga que \textit{$p^{*}$} es una aproximación de \textit{p}. El \textbf{error absoluto} es $|p-p^{*}|$  y el \textbf{error relativo} es $\frac{|p-p^{*}|}{|p|}$ siempre que $p\neq0$.
+\end{tcolorbox}
+
+A continuación se ejemplifica como cambian dichos errores en función de los puntos $p$ y $p*$. \ref{tab:tabla1}
+
+
+
+\begin{table}[h!]
+\centering
+    \begin{tabular}{c c c c}
+    \multicolumn{4}{c}{\textbf{Comparación entre error absoluto y error relativo.}}\tabularnewline
+    \hline 
+    \textbf{p} & \textbf{p*} & \textbf{Error absoluto} & \textbf{Error relativo} \\
+    \hline 
+    1 & 0.99 & 0.01 & 0.01 \\
+    1 & 1.01 & 0.01 & 0.01 \\
+    -1.5 & -1.2 & 0.3 & 0.2 \\
+    100 & 99.99 & 0.01 & 0.0001 \\
+    100 & 99 & 1 & 0.01 \\
+    \hline 
+    \end{tabular}
+    \caption{Comparativa de errores}
+    \label{tab:tabla1}
+\end{table}
+
